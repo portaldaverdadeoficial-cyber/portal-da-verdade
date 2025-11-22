@@ -1,1 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Portal da Verdade</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+    <header>
+        <h1>Portal da Verdade</h1>
+        <nav>
+            <ul>
+                <li><a href="#" onclick="loadPage('home')">Início</a></li>
+                <li><a href="#" onclick="loadPage('cards')">Cards</a></li>
+                <li><a href="#" onclick="loadPage('parts')">Partes da Bíblia</a></li>
+                <li><a href="#" onclick="loadPage('devocional')">Devocional</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main id="content">
+        <h2>Carregando...</h2>
+    </main>
+
+    <script>
+        async function loadPage(page) {
+            const content = document.getElementById("content");
+
+            if (page === "home") {
+                content.innerHTML = `
+                    <h2>Bem-vindo ao Portal da Verdade</h2>
+                    <p>Seu espaço para aprendizado bíblico de forma simples e direta.</p>
+                `;
+                return;
+            }
+
+            try {
+                let url = "";
+
+                if (page === "cards") url = "cards.json";
+                if (page === "parts") url = "parts.json";
+                if (page === "devocional") url = "devotional.json";
+
+                const response = await fetch(url);
+
+                if (!response.ok) {
+                    content.innerHTML = "<h2>Erro ao carregar os dados.</h2>";
+                    return;
+                }
+
+                const data = await response.json();
+
+                let html = `<h2>${page.toUpperCase()}</h2><ul>`;
+
+                data.forEach(item => {
+                    html += `<li>${item}</li>`;
+                });
+
+                html += "</ul>";
+
+                content.innerHTML = html;
+
+            } catch (error) {
+                content.innerHTML = "<h2>Erro ao carregar conteúdo.</h2>";
+            }
+        }
+
+        loadPage("home");
+    </script>
+
+</body>
+</html>
 
